@@ -12,6 +12,8 @@ const app=express();
         const conn=await mongoose.connect(process.env.MONGODB_URL);
         if(conn){
             console.log("mongo-db conected");
+            console.log("MONGO_URI:", process.env.MONGO_URI);
+
         }
     }
 app.get("/",(res,req)=>{
