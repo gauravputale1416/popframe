@@ -2,10 +2,12 @@ import cors from "cors"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import express from "express"
+import { getAllMovies,postMovie, searchMovies ,searchMoviesById } from "./controller/movie.js"
+
 dotenv.config()
 
 const app = express();
-app.use(express.json());
+app.use(express.json());      
 app.use(cors());
 
 const connectDB = async () => {
@@ -27,56 +29,13 @@ const connectDB = async () => {
         process.exit(1);
     }
 };
-
-// Fixed parameter order from (res,req) to (req,res)
 app.get("/", (req, res) => {
-    res.json({
-        message: "server is on",
-    });
+    res.send("API is running...");
 });
-
-// Fixed parameter order and added request body validation
-app.post("/movies", (req, res) => {
-    // Check if body exists and is not empty
-    if (!req.body || Object.keys(req.body).length === 0) {
-        return res.status(400).json({
-            success: false,
-            message: "Request body is required",
-        });
-    }
-
-    try {
-        const {
-            title,
-            description,
-            images,
-            category,
-            year,
-            language,
-            rating,
-        } = req.body;
-
-        // Validate required fields
-        if (!title) {
-            return res.status(400).json({
-                success: false,
-                message: "Title is required",
-            });
-        }
-
-        res.json({
-            message: "Movie added successfully",
-            success: true,
-            data: req.body,
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Error processing request",
-            error: error.message,
-        });
-    }
-});
+app.post("/movies", postMovie);
+app.get("/movies", getAllMovies);
+app.get("/movies/search", searchMovies);
+app.get("/movies/:id", searchMoviesById);
 
 const PORT = process.env.PORT || 1010;
 
