@@ -3,7 +3,7 @@ import React from 'react'
 function Home() {
   return (
     <div>
-      homme 
+      <h1>Welcome to PopFrame🍿</h1>
     </div>
   )
 }
