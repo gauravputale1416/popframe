@@ -151,4 +151,28 @@ const { id }=req.params;
 
 }
 
-export{getAllMovies,postMovie ,searchMovies,searchMoviesById ,putMovie,putmovieRating ,deleteMovies};
+const putmovieImages= async (req,res)=>{
+    const {id}=req.params;
+    const {images}=req.body;
+    try{
+        await
+        Movie.updateOne({_id:id},{
+            images
+        });
+        const updatedMovie=
+        await Movie.findOne({_id:id});
+        res.json({
+            success:true,
+            message:"movie images updated",
+            data:updatedMovie,
+        });
+    }catch(error){
+        res.status(500).json({
+            success:false,
+            message:"error processing request",
+            error:error.message,
+        });
+    }
+}
+
+export{getAllMovies,postMovie ,searchMovies,searchMoviesById ,putMovie,putmovieRating ,deleteMovies, putmovieImages};
