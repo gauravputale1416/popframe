@@ -14,7 +14,7 @@ function Home() {
   // Fetch all movies
   const fetchMovies = async () => {
     try {
-      const res = await axios.get('${import.meta.env.VITE_API_URL}/movies');
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/movies`);
       setMovies(res?.data?.data ?? []);
     } catch (err) {
       console.error('fetchMovies error', err);
