@@ -2,28 +2,31 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import MoviesCard from '../components/moviesCard.jsx'
 import toast, { Toaster } from 'react-hot-toast';
+import imgnotfound from '../assets/notfound.png'
+import API_URL from '../constants.js';
+
 
 function Home() {
   const [movies, setMovies] = useState([]);
   const [searchMovie, setSearchMovie] = useState("");
-  const [error, setError] = useState(false);
+  const [noResult, setNoResult] = useState(false); // 👈 new state
 
   const debounceRef = useRef(null);
 
-  // Fetch all movies
+
   const fetchMovies = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/movies`);
+      const res = await axios.get(`${API_URL}/movies`);
       setMovies(res?.data?.data ?? []);
+      setNoResult(false); // reset
     } catch (err) {
       console.error('fetchMovies error', err);
       setMovies([]);
     }
   };
 
-  // Search movies
   const handleSearch = async () => {
-    toast.loading("Searching movies...", { id: "search" }); // 👈 only one toast
+    toast.loading("Searching movies...", { id: "search" });
 
     if (!searchMovie.trim()) {
       fetchMovies();
@@ -33,34 +36,32 @@ function Home() {
 
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/movies/search?q=${searchMovie}`
+        `${API_URL}/movies/search?q=${searchMovie}`
       );
 
       const data = res.data.data || [];
-
       setMovies(data);
 
-      toast.dismiss("search"); // remove searching toast
+      toast.dismiss("search");
 
-      // 🚨 No movies found
       if (data.length === 0) {
+        setNoResult(true); // show Not Found UI
         toast.error("No movies found!", { id: "no-movie" });
+      } else {
+        setNoResult(false);
       }
 
     } catch (err) {
       toast.dismiss("search");
       toast.error("Error searching movies", { id: "search-error" });
-
       setMovies([]);
-      setError(err?.response?.data?.message || "An error occurred");
+      setNoResult(true);
     }
   };
 
-  // 🔥 Live search (debounced)
+  // Live search (debounced)
   useEffect(() => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
     debounceRef.current = setTimeout(() => {
       handleSearch();
@@ -77,8 +78,8 @@ function Home() {
   return (
     <div className="bg-gray-950 min-h-screen p-6">
 
-      {/* 🔍 Dark-Themed Search Box */}
-      <div className="mb-6 w-full max-w-md">
+    
+      <div className="mb-6 w-full max-w-md mx-auto">
         <div className="relative">
           <input
             type="text"
@@ -97,13 +98,17 @@ function Home() {
         </div>
       </div>
 
-      <h1 className="text-4xl font-bold text-white mb-8">🎬 PopFrame</h1>
+      <h1 className="text-4xl font-bold text-white mb-8 text-center">🎬 PopFrame</h1>
 
-      {movies.length === 0 ? (
-        <h2 className="text-center text-gray-400 text-xl mt-8">
-          No movies available
-        </h2>
-      ) : (
+      {noResult && (
+        <div className="flex flex-col items-center mt-10">
+          <img src={imgnotfound} className="w-80 opacity-80" alt="Not Found" />
+          <p className="text-gray-400 text-lg mt-4">No movies found</p>
+        </div>
+      )}
+
+      {/* Movies Grid */}
+      {!noResult && movies.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 
                         lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {movies.map((movieObj) => {
