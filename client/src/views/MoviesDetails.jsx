@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import axios from "axios";
 import API_URL from "../constants";
 
+
 function MoviesDetails() {
   const { id } = useParams();
 

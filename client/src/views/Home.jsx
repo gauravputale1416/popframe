@@ -4,6 +4,7 @@ import MoviesCard from '../components/moviesCard.jsx'
 import toast, { Toaster } from 'react-hot-toast';
 import imgnotfound from '../assets/notfound.png'
 import API_URL from '../constants.js';
+import { Trash2 } from 'lucide-react';
 
 
 function Home() {
@@ -125,6 +126,7 @@ function Home() {
                 category={category}
                 language={language}
                 rating={rating}
+                loadMovies={fetchMovies}
               />
             );
           })}
