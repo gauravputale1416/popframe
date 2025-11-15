@@ -8,7 +8,6 @@ function Home() {
   const [searchMovie, setSearchMovie] = useState("");
   const [error, setError] = useState(false);
 
-  // 🌟 debounce timer stored in a ref so it persists
   const debounceRef = useRef(null);
 
   // Fetch all movies
@@ -24,8 +23,11 @@ function Home() {
 
   // Search movies
   const handleSearch = async () => {
+    toast.loading("Searching movies...", { id: "search" }); // 👈 only one toast
+
     if (!searchMovie.trim()) {
       fetchMovies();
+      toast.dismiss("search");
       return;
     }
 
@@ -38,19 +40,23 @@ function Home() {
 
       setMovies(data);
 
-      // 🚨 Show toast when no movies found
+      toast.dismiss("search"); // remove searching toast
+
+      // 🚨 No movies found
       if (data.length === 0) {
-        toast.error("No movies found!");
+        toast.error("No movies found!", { id: "no-movie" });
       }
 
     } catch (err) {
+      toast.dismiss("search");
+      toast.error("Error searching movies", { id: "search-error" });
+
       setMovies([]);
       setError(err?.response?.data?.message || "An error occurred");
-      toast.error("Error searching movies");
     }
   };
 
-  // 🔥 Live Search (Debounced)
+  // 🔥 Live search (debounced)
   useEffect(() => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -58,7 +64,7 @@ function Home() {
 
     debounceRef.current = setTimeout(() => {
       handleSearch();
-    }, 500); // 0.5 sec delay
+    }, 500);
 
     return () => clearTimeout(debounceRef.current);
   }, [searchMovie]);
