@@ -116,6 +116,7 @@ function Home() {
 
             return (
               <MoviesCard
+              _id={_id}
                 key={_id}
                 title={title}
                 description={description}

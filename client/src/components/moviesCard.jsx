@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link, Links } from 'react-router'
 
-function MoviesCard({ title, description, year, images, category, language, rating }) {
+function MoviesCard({_id, title, description, year, images, category, language, rating }) {
     // Generate star rating display (0-5 stars)
     const renderStars = (rate) => {
         const stars = []
@@ -17,7 +18,9 @@ function MoviesCard({ title, description, year, images, category, language, rati
     }
 
     return (
-        <div className="bg-gray-900 text-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 hover:scale-105 transform">
+       
+         <Link to={`/movie/${_id}`}
+        className="bg-gray-900 text-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 hover:scale-105 transform">
             {/* Image */}
             <div className="relative h-56 overflow-hidden bg-gray-800">
                 <img
@@ -43,7 +46,8 @@ function MoviesCard({ title, description, year, images, category, language, rati
                     </button>
                 </div>
             </div>
-        </div>
+        
+        </Link>
     )
 }
 
