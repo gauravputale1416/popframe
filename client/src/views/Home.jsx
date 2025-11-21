@@ -134,6 +134,13 @@ function Home() {
       )}
 
       <Toaster />
+
+      <button onClick={()=>{
+        window.location.href='/newMovie'
+      }} className="fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-700 text-white 
+                                      text-sm font-semibold px-4 py-3 rounded-full shadow-lg transition">
+        + Add New Movie
+      </button>
     </div>
   );
 }
