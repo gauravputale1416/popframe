@@ -4,24 +4,13 @@ import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import API_URL from "../constants.js";
+import Rating from "./Rating.jsx";
 
 function MoviesCard({ _id, title, description, year, images, category, language, rating , loadMovies}) {
     
     
 
-    const renderStars = (rate) => {
-        const stars = [];
-        const roundedRating = Math.round(rate) || 0;
-
-        for (let i = 0; i < 5; i++) {
-            stars.push(
-                <span key={i} className={i < roundedRating ? "text-yellow-400" : "text-gray-600"}>
-                    ★
-                </span>
-            );
-        }
-        return stars;
-    };
+ 
 const handleDelete = async () => {
     try {
         await axios.delete(`${API_URL}/movies/${_id}`);
@@ -70,8 +59,8 @@ const handleDelete = async () => {
 
                 {/* Rating Stars */}
                 <div className="flex items-center gap-1 mb-2">
-                    {renderStars(rating)}
-                    <span className="text-gray-400 text-sm ml-1">({rating})</span>
+                   
+                    <span className="text-gray-400 text-sm ml-1"><Rating rating={rating} /></span>
                 </div>
 
                 <p className="text-xs text-gray-400 mb-1">

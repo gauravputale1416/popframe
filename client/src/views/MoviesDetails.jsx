@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import API_URL from "../constants";
-
+import Rating from "../components/Rating";
 
 function MoviesDetails() {
   const { id } = useParams();
@@ -17,6 +17,16 @@ function MoviesDetails() {
     rating: 0,
   });
 
+  const chnageRating =   async(newRating) => {
+ await  axios.patch(`${API_URL}/movies/${id}/rating`,{rating:newRating
+
+ });
+ 
+setMovieInfo({...movieInfo,rating:newRating});
+  
+
+
+  };
   const loadMovieDetails = async () => {
     try {
       const response = await axios.get(`${API_URL}/movies/${id}`);
@@ -53,22 +63,11 @@ function MoviesDetails() {
         )}
 
         {/* Star Rating */}
-        <div className="flex items-center justify-center mb-4">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <span
-              key={index}
-              className={`text-3xl ${
-                index < movieInfo.rating ? "text-yellow-400" : "text-gray-600"
-              }`}
-            >
-              ★
-            </span>
-          ))}
-          <span className="ml-3 text-lg text-gray-300">
-            ({movieInfo.rating} / 5)
-          </span>
-        </div>
 
+        <Rating onClick={(newRating)=>{
+          chnageRating(newRating);
+        }} rating={movieInfo.rating} />
+       
         {/* Movie Info */}
         <div className="space-y-3 text-lg text-center sm:text-left">
 
