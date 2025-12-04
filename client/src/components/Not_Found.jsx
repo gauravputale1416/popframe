@@ -19,12 +19,12 @@ function NotFound() {
 
        
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          Scene Not Found! 🎭
+          Scene  Not  Found! 🎭
         </h2>
 
         {/* Description */}
         <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-md mx-auto">
-          Oops! This page left the cinema. It seems you've wandered into an unreleased scene of PopFrame.
+          Oops..! This page left the cinema . It seems you've wandered into an unreleased scene of PopFrame.
         </p>
 
         {/* Movie Related Messages */}
