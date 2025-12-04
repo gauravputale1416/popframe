@@ -56,12 +56,11 @@ function NotFound() {
           </Link>
         </div>
 
-        {/* Footer Emoji */}
         <div className="text-5xl animate-pulse">
           🎭 📽️ 🎪
         </div>
 
-        {/* Decorative Elements */}
+        
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 text-4xl opacity-20 animate-float">🍿</div>
           <div className="absolute bottom-20 right-10 text-4xl opacity-20 animate-float" style={{animationDelay: '2s'}}>🎬</div>
