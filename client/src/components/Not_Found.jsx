@@ -30,7 +30,7 @@ function NotFound() {
     
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           <span className="px-4 py-2 bg-red-600/20 border border-red-500 rounded-full text-red-300 text-sm">
-            🍿 Popcorn not found
+            🍿 Popcorn not found ,try again
           </span>
           <span className="px-4 py-2 bg-purple-600/20 border border-purple-500 rounded-full text-purple-300 text-sm">
             🎞️ Reel missing
@@ -72,4 +72,4 @@ function NotFound() {
   )
 }
 
-export default NotFound
+export default NotFound;
