@@ -60,7 +60,6 @@ function Home() {
     }
   };
 
-  // Live search (debounced)
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
@@ -71,7 +70,6 @@ function Home() {
     return () => clearTimeout(debounceRef.current);
   }, [searchMovie]);
 
-  // Load movies first time
   useEffect(() => {
     fetchMovies();
   }, []);
@@ -108,7 +106,8 @@ function Home() {
         </div>
       )}
 
-      {/* Movies Grid */}
+      
+      
       {!noResult && movies.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 
                         lg:grid-cols-4 xl:grid-cols-5 gap-6">
