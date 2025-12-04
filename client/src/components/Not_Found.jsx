@@ -12,12 +12,12 @@ function NotFound() {
           <span className="animation-delay-200">🎥</span>
         </div>
 
-        {/* 404 Text */}
+       
         <h1 className="text-9xl font-bold bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-4">
           404
         </h1>
 
-        {/* Main Message */}
+       
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
           Scene Not Found! 🎭
         </h2>
