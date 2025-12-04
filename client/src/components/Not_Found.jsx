@@ -46,7 +46,7 @@ function NotFound() {
             to="/" 
             className="px-8 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
           >
-            🏠 Back to Home
+            🏠 Back to Home Page
           </Link>
           <Link 
             to="/movies" 
