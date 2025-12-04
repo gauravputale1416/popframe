@@ -5,7 +5,7 @@ function NotFound() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center px-4">
       <div className="text-center">
-        {/* Movie Reel Animation */}
+      
         <div className="mb-8 flex justify-center gap-4 text-6xl animate-bounce">
           <span>🎬</span>
           <span className="animation-delay-100">🎞️</span>
@@ -40,7 +40,7 @@ function NotFound() {
           </span>
         </div>
 
-        {/* Action Buttons */}
+     
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <Link 
             to="/" 
