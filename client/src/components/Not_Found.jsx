@@ -22,12 +22,12 @@ function NotFound() {
           Scene  Not  Found! 🎭
         </h2>
 
-        {/* Description */}
+        
         <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-md mx-auto">
           Oops..! This page left the cinema . It seems you've wandered into an unreleased scene of PopFrame.
         </p>
 
-        {/* Movie Related Messages */}
+    
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           <span className="px-4 py-2 bg-red-600/20 border border-red-500 rounded-full text-red-300 text-sm">
             🍿 Popcorn not found
