@@ -5,7 +5,7 @@ function Rating({ rating = 0, onClick }) {
   const rounded = Math.round(Number(rating) || 0);
 
   return (
-    <div className="flex items-center justify-center mb-4" role="img" aria-label={`Rating: ${rating} out of ${MAX}`}>
+    <div className="flex items-center justify-center mb-4 cursor-pointer" role="img" aria-label={`Rating: ${rating} out of ${MAX}`}>
       {Array.from({ length: MAX }).map((_, i) => {
         const pos = i + 1;
         const filled = pos <= rounded;
