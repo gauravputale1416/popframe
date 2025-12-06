@@ -63,11 +63,11 @@ setMovieInfo({...movieInfo,rating:newRating});
         )}
 
         {/* Star Rating */}
-
+<div className="flex justify-center cursor-pointer">
         <Rating onClick={(newRating)=>{
           chnageRating(newRating);
         }} rating={movieInfo.rating} />
-       
+       </div>
         {/* Movie Info */}
         <div className="space-y-3 text-lg text-center sm:text-left">
 
