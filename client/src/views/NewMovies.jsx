@@ -1,10 +1,27 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import API_URL from '../constants.js';
-import toast, { Toaster } from 'react-hot-toast';
-import { Delete, CirclePlus } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import API_URL from "../constants.js";
+import toast, { Toaster } from "react-hot-toast";
+import { Delete, CirclePlus } from "lucide-react";
+import { useParams, useNavigate } from "react-router";
 
 function NewMovies() {
+  // detect id from route param (if you add route with param) or from query string ?id=...
+  const params = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const getIdFromQuery = () => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      return sp.get("id");
+    } catch {
+      return null;
+    }
+  };
+
+  const editId = params?.id || getIdFromQuery();
+
   const [movieInfo, setMovieInfo] = useState({
     title: "",
     description: "",
@@ -21,6 +38,41 @@ function NewMovies() {
   });
 
   const [newImageUrl, setNewImageUrl] = useState("");
+
+  // Load movie when editing (if editId exists)
+  useEffect(() => {
+    if (!editId) return;
+
+    let mounted = true;
+    setLoading(true);
+    axios
+      .get(`${API_URL}/movies/${editId}`)
+      .then((res) => {
+        const movie = res?.data?.data || res?.data || null;
+        if (movie && mounted) {
+          // normalize fields we expect
+          setMovieInfo({
+            title: movie.title || "",
+            description: movie.description || "",
+            year: movie.year || "",
+            images: Array.isArray(movie.images) ? movie.images : movie.images ? [movie.images] : [],
+            category: movie.category || "",
+            language: movie.language || "",
+            rating: movie.rating ?? 0,
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load movie for editing:", err?.response?.data || err.message);
+        toast.error("Failed to load movie for editing");
+      })
+      .finally(() => setLoading(false));
+
+    return () => {
+      mounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId]);
 
   const addImage = () => {
     const url = newImageUrl.trim();
@@ -47,25 +99,35 @@ function NewMovies() {
       return;
     }
 
-    toast.loading("Adding movie...", { id: "add-movie" });
+    setLoading(true);
+    toast.loading(editId ? "Updating movie..." : "Adding movie...", { id: "add-movie" });
 
     try {
-      // POST new movie to backend
-      // Ensure numeric rating if required by backend
       const payload = {
         ...movieInfo,
+        // ensure rating is numeric on payload
         rating: Number(movieInfo.rating) || 0,
       };
 
-      const res = await axios.post(`${API_URL}/movies`, payload);
+      let res;
+      if (editId) {
+        // PUT to /movies/:id to update (as requested)
+        res = await axios.put(`${API_URL}/movies/${editId}`, payload);
+      } else {
+        // create new movie
+        res = await axios.post(`${API_URL}/movies`, payload);
+      }
 
       toast.dismiss("add-movie");
 
-      if (res.status === 201 || res.status === 200) {
-        toast.success("Movie added successfully");
-        // Go back to home (reload so Home fetches updated list)
-        window.location.href = "/";
+      // consider success when 200/201
+      if (res?.status === 200 || res?.status === 201) {
+        toast.success(editId ? "Movie updated successfully" : "Movie added successfully");
+
+        // navigate back to home and let Home fetch fresh movies
+        navigate("/");
       } else {
+        console.warn("Unexpected response", res);
         toast.error("Unexpected response from server");
       }
     } catch (err) {
@@ -74,9 +136,11 @@ function NewMovies() {
         err?.response?.data?.message ||
         err?.response?.data ||
         err.message ||
-        "Failed to add movie";
+        "Failed to add/update movie";
       toast.error(String(msg));
-      console.error("Add movie error:", err);
+      console.error("Add/Update movie error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,10 +149,12 @@ function NewMovies() {
       <Toaster />
       <div className="w-full max-w-2xl bg-gray-800 rounded-2xl p-6 shadow-2xl border border-gray-700 mt-8">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold text-white">Add New Movie</h1>
+          <h1 className="text-2xl font-bold text-white">
+            {editId ? "Edit Movie" : "Add New Movie"}
+          </h1>
           <div className="flex gap-2">
             <button
-              onClick={() => window.history.back()}
+              onClick={() => navigate(-1)}
               className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition"
             >
               ← Back
@@ -212,7 +278,7 @@ function NewMovies() {
           <div className="flex items-center justify-end gap-3 mt-4">
             <button
               type="button"
-              onClick={() => window.history.back()}
+              onClick={() => navigate(-1)}
               className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition"
             >
               Cancel
@@ -220,9 +286,10 @@ function NewMovies() {
 
             <button
               type="submit"
-              className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition"
+              disabled={loading}
+              className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition disabled:opacity-60"
             >
-              Add Movie
+              {editId ? "Save Changes" : "Add Movie"}
             </button>
           </div>
         </form>
