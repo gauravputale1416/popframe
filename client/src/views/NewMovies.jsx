@@ -6,10 +6,12 @@ import { Delete, CirclePlus } from "lucide-react";
 import { useParams, useNavigate } from "react-router";
 
 function NewMovies() {
-  // detect id from route param (if you add route with param) or from query string ?id=...
   const params = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  // fallback to localhost:1010 if env variable is not provided
+  const BASE_URL = API_URL || "http://localhost:1010";
 
   const getIdFromQuery = () => {
     try {
@@ -46,7 +48,7 @@ function NewMovies() {
     let mounted = true;
     setLoading(true);
     axios
-      .get(`${API_URL}/movies/${editId}`)
+      .get(`${BASE_URL}/movies/${editId}`)
       .then((res) => {
         const movie = res?.data?.data || res?.data || null;
         if (movie && mounted) {
@@ -111,11 +113,11 @@ function NewMovies() {
 
       let res;
       if (editId) {
-        // PUT to /movies/:id to update (as requested)
-        res = await axios.put(`${API_URL}/movies/${editId}`, payload);
+        // PUT to /movies/:id (explicitly to the requested URL)
+        res = await axios.put(`${BASE_URL}/movies/${editId}`, payload);
       } else {
         // create new movie
-        res = await axios.post(`${API_URL}/movies`, payload);
+        res = await axios.post(`${BASE_URL}/movies`, payload);
       }
 
       toast.dismiss("add-movie");
